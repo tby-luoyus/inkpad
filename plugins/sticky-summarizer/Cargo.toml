@@ -1,0 +1,19 @@
+[package]
+name = "sticky-summarizer"
+version = "2.0.0"
+edition = "2021"
+description = "便签总结生成笔记 —— 便签应用的第一个内置插件（Rust 实现，零运行时依赖）"
+authors = ["清时予"]
+license = "MIT"
+
+[[bin]]
+name = "sticky-summarizer"
+path = "src/main.rs"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+chrono = { version = "0.4", features = ["serde"] }
+
+# 手写极简 HTTP 服务与客户端，刻意不引入 axum/reqwest：
+# 插件应尽量小、启动快、依赖少（编译产物只有几百 KB）。

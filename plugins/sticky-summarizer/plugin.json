@@ -1,0 +1,55 @@
+{
+  "id": "sticky-summarizer",
+  "name": "便签总结生成笔记",
+  "author": "清时予",
+  "description": "把选中的便签（或全部便签）自动整理成结构化 Markdown 笔记，写入笔记库。支持按颜色/标签分组、提取待办、生成目录。",
+  "version": "2.0.0",
+  "permissions": [
+    "notes.read",
+    "docs.write",
+    "events.subscribe",
+    "commands"
+  ],
+  "events": [
+    "note.*",
+    "doc.*"
+  ],
+  "commands": [
+    {
+      "name": "summary.notes",
+      "description": "汇总便签生成笔记（可按 id 列表 / 颜色 / 是否含待办筛选）",
+      "params": {
+        "ids": "string[]?",
+        "colors": "string[]?",
+        "title": "string?",
+        "folder": "string?",
+        "includeTrashed": "bool?",
+        "openInApp": "bool?"
+      }
+    },
+    {
+      "name": "summary.todos",
+      "description": "提取所有便签中的待办项，生成待办清单笔记",
+      "params": {
+        "folder": "string?",
+        "title": "string?"
+      }
+    },
+    {
+      "name": "summary.stats",
+      "description": "统计便签分布（颜色 / 字数 / 活跃度），生成统计笔记",
+      "params": {
+        "folder": "string?",
+        "days": "number?"
+      }
+    }
+  ],
+  "endpoint": "http://127.0.0.1:43110/sticky",
+  "frontend": null,
+  "enabled": true,
+  "autoStart": {
+    "command": "bin/sticky-summarizer.exe",
+    "args": [],
+    "cwd": "."
+  }
+}

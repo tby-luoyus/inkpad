@@ -1,0 +1,288 @@
+/* ==========================================================================
+   便签卡片（网格 / 列表）
+   ========================================================================== */
+
+.note-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--sn-note-bg, var(--sn-yellow));
+  border: 1px solid transparent;
+  border-radius: var(--sn-radius);
+  box-shadow: var(--sn-shadow-note);
+  cursor: pointer;
+  overflow: hidden;
+  transition: box-shadow var(--sn-transition), transform var(--sn-transition),
+    border-color var(--sn-transition);
+  animation: card-in 200ms cubic-bezier(0.2, 0, 0, 1);
+  outline: none;
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.note-card:hover {
+  box-shadow: var(--sn-shadow-note-hover);
+  transform: translateY(-2px);
+}
+
+.note-card:focus-visible {
+  border-color: var(--sn-accent);
+  box-shadow: var(--sn-shadow-note-hover), 0 0 0 1px var(--sn-accent);
+}
+
+.note-card.is-pinned::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------------- 网格视图 */
+.note-card--grid {
+  min-height: 168px;
+  padding: 12px 14px 10px;
+}
+
+.note-card--grid .note-card__body {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.note-card--grid .note-card__preview {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ---------------------------------------------------------------- 列表视图 */
+.note-card--list {
+  flex-direction: row;
+  align-items: center;
+  gap: 14px;
+  padding: 11px 14px;
+  min-height: 62px;
+}
+
+.note-card--list .note-card__head {
+  flex: 0 0 auto;
+  max-width: 34%;
+  margin-bottom: 0;
+}
+
+.note-card--list .note-card__title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.note-card--list .note-card__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.note-card--list .note-card__preview {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+
+.note-card--list .note-card__foot {
+  flex: 0 0 auto;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+/* ------------------------------------------------------------------ 头部 */
+.note-card__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 6px;
+  min-width: 0;
+}
+
+.note-card__title {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-size: 14.5px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--sn-note-text);
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.note-card__untitled {
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.38);
+}
+
+[data-theme='dark'] .note-card__untitled {
+  color: rgba(255, 255, 255, 0.42);
+}
+
+/* ---------------------------------------------------------------- 操作区 */
+.note-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  opacity: 0;
+  transition: opacity var(--sn-transition);
+}
+
+.note-card:hover .note-card__actions,
+.note-card:focus-within .note-card__actions,
+.note-card__actions:has(.is-active) {
+  opacity: 1;
+}
+
+.nc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 4px;
+  color: var(--sn-note-text);
+  opacity: 0.7;
+  transition: background var(--sn-transition), opacity var(--sn-transition);
+}
+
+.nc-btn:hover {
+  background: rgba(0, 0, 0, 0.09);
+  opacity: 1;
+}
+
+.nc-btn.is-active {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.09);
+}
+
+/* 置顶的卡片始终显示置顶按钮 */
+.note-card.is-pinned .note-card__actions {
+  opacity: 1;
+}
+
+/* ---------------------------------------------------------------- 卡片菜单 */
+.nc-menu-wrap {
+  position: relative;
+}
+
+.nc-menu-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+}
+
+.nc-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 50;
+  min-width: 176px;
+  padding: 5px;
+  background: var(--sn-surface);
+  border: 1px solid var(--sn-border);
+  border-radius: 8px;
+  box-shadow: var(--sn-shadow-dialog);
+  animation: nc-menu-in 120ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+@keyframes nc-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.nc-menu button {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 7px 9px;
+  border-radius: 4px;
+  font-size: 13px;
+  color: var(--sn-text);
+  text-align: left;
+}
+
+.nc-menu button:hover {
+  background: var(--sn-surface-2);
+}
+
+.nc-menu button.is-danger {
+  color: var(--sn-danger);
+}
+
+/* ------------------------------------------------------------------ 正文 */
+.note-card__preview {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(0, 0, 0, 0.62);
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.note-card__preview--empty {
+  color: rgba(0, 0, 0, 0.34);
+  font-style: normal;
+}
+
+[data-theme='dark'] .note-card__preview {
+  color: rgba(255, 255, 255, 0.66);
+}
+
+/* ------------------------------------------------------------------ 底部 */
+.note-card__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+.note-card__time {
+  font-size: 11.5px;
+  color: rgba(0, 0, 0, 0.38);
+}
+
+[data-theme='dark'] .note-card__time {
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.note-card__badge {
+  font-size: 10.5px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.55);
+}
+
+[data-theme='dark'] .note-card__badge {
+  background: rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.note-card--list .note-card__foot {
+  border-top: none;
+}

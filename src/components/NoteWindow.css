@@ -1,0 +1,311 @@
+/* ==========================================================================
+   独立便签窗口
+   尺寸随窗口变化；配色由 data-color 决定（见 tokens.css）
+   ========================================================================== */
+
+.note-root {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  background: var(--sn-note-bg, var(--sn-yellow));
+  color: var(--sn-note-text);
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: var(--sn-shadow-note-win);
+  animation: note-appear 160ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+@keyframes note-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ------------------------------------------------------------- 顶部工具栏 */
+.note-bar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 40px;
+  flex: 0 0 40px;
+  padding: 0 6px;
+  /* 便签顶部比正文稍深一点，形成微软便笺那种「纸条头」的层次 */
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.035) 0%,
+    rgba(0, 0, 0, 0.012) 70%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  cursor: default;
+  user-select: none;
+}
+
+.note-bar__left,
+.note-bar__right {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+
+.note-bar__spacer {
+  flex: 1;
+  align-self: stretch;
+}
+
+.nb-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--sn-radius-sm);
+  color: var(--sn-note-text);
+  opacity: 0.75;
+  transition: background var(--sn-transition), opacity var(--sn-transition);
+}
+
+.nb-btn:hover {
+  background: rgba(0, 0, 0, 0.08);
+  opacity: 1;
+}
+
+.nb-btn:active {
+  background: rgba(0, 0, 0, 0.14);
+}
+
+.nb-btn.is-active {
+  background: rgba(0, 0, 0, 0.1);
+  opacity: 1;
+}
+
+/* --------------------------------------------------------------- 更多菜单 */
+.note-bar__menu-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.note-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 80;
+  min-width: 208px;
+  padding: 5px;
+  background: var(--sn-surface);
+  border: 1px solid var(--sn-border);
+  border-radius: 8px;
+  box-shadow: var(--sn-shadow-dialog);
+  color: var(--sn-text);
+  animation: menu-in 120ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.note-menu button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 4px;
+  font-size: 13.5px;
+  text-align: left;
+  color: var(--sn-text);
+}
+
+.note-menu button span {
+  flex: 1;
+}
+
+.note-menu button:hover {
+  background: var(--sn-surface-2);
+}
+
+.note-menu button.is-danger {
+  color: var(--sn-danger);
+}
+
+.note-menu kbd {
+  font-family: var(--sn-font);
+  font-size: 11px;
+  color: var(--sn-text-3);
+}
+
+.note-menu__sep {
+  height: 1px;
+  margin: 4px 6px;
+  background: var(--sn-border);
+}
+
+/* ---------------------------------------------------------------- 正文区 */
+.note-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.note-textarea {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  padding: 2px 14px 6px;
+  border: none;
+  outline: none;
+  resize: none;
+  background: transparent;
+  color: var(--sn-note-text);
+  font-family: var(--sn-font-note);
+  font-size: 16px;
+  line-height: 1.55;
+  overflow-y: auto;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  white-space: pre-wrap;
+  caret-color: var(--sn-note-text);
+}
+
+.note-textarea::placeholder {
+  color: rgba(0, 0, 0, 0.32);
+}
+
+[data-theme='dark'] .note-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.34);
+}
+
+/* -------------------------------------------------------------- AI 面板 */
+.note-agent {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  padding: 10px;
+  background: var(--sn-surface);
+  color: var(--sn-text);
+  border: 1px solid var(--sn-border);
+  border-radius: 10px;
+  box-shadow: var(--sn-shadow-dialog);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 78%;
+  animation: menu-in 140ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.note-agent__head {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.note-agent__head span {
+  flex: 1;
+}
+
+.note-agent__close {
+  color: var(--sn-text-3);
+  font-size: 12px;
+  padding: 2px 5px;
+  border-radius: 4px;
+}
+
+.note-agent__close:hover {
+  background: var(--sn-surface-2);
+  color: var(--sn-text);
+}
+
+.note-agent__input {
+  width: 100%;
+  resize: none;
+  padding: 8px 10px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--sn-text);
+  background: var(--sn-surface-2);
+  border: 1px solid var(--sn-border);
+  border-radius: 6px;
+  outline: none;
+}
+
+.note-agent__input:focus {
+  border-color: var(--sn-accent);
+}
+
+.note-agent__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.note-agent__run {
+  padding: 6px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+  background: var(--sn-accent);
+  border-radius: 6px;
+  transition: background var(--sn-transition);
+}
+
+.note-agent__run:hover:not(:disabled) {
+  background: var(--sn-accent-hover);
+}
+
+.note-agent__run:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.note-agent__hint {
+  font-size: 11px;
+  color: var(--sn-text-3);
+}
+
+.note-agent__out {
+  margin: 0;
+  padding: 8px 10px;
+  max-height: 140px;
+  overflow: auto;
+  font-family: var(--sn-font);
+  font-size: 12.5px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: var(--sn-surface-2);
+  border-radius: 6px;
+  color: var(--sn-text-2);
+}
+
+/* --------------------------------------------------------------- 状态栏 */
+.note-foot {
+  flex: 0 0 22px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 12px 4px;
+  font-size: 11px;
+  color: rgba(0, 0, 0, 0.36);
+  user-select: none;
+}
+
+[data-theme='dark'] .note-foot {
+  color: rgba(255, 255, 255, 0.4);
+}

@@ -1,0 +1,32 @@
+{
+  "name": "sticky-notes",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "现代便签桌面应用 — 主窗口管理 + 独立贴便签，内置插件与 Agent 拓展接口",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "tauri": "tauri",
+    "plugin:build": "cargo build --release --manifest-path plugins/sticky-summarizer/Cargo.toml",
+    "app:dev": "npm run plugin:build && tauri dev",
+    "app:build": "npm run plugin:build && tauri build"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2.1.1",
+    "@tauri-apps/plugin-dialog": "^2.2.0",
+    "@tauri-apps/plugin-fs": "^2.2.0",
+    "@tauri-apps/plugin-opener": "^2.2.5",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.1.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "^5.6.3",
+    "vite": "^6.0.3"
+  }
+}
