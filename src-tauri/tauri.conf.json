@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "便签",
+  "productName": "墨签",
   "version": "1.0.0",
   "identifier": "com.stickynotes.desktop",
   "build": {
@@ -36,7 +36,9 @@
   },
   "bundle": {
     "active": true,
-    "targets": ["nsis"],
+    "targets": [
+      "nsis"
+    ],
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
@@ -44,15 +46,19 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ],
-    "copyright": "© Sticky Notes",
+    "copyright": "© 清时予科技 · 墨签 InkPad",
     "category": "Productivity",
-    "shortDescription": "现代便签桌面应用",
+    "shortDescription": "墨签 InkPad — 现代桌面便签与笔记",
     "longDescription": "主窗口统一管理所有便签，支持独立便签窗口贴到桌面。内置主题包、插件、Agent 与多 App 联动接口。",
     "windows": {
       "nsis": {
         "installMode": "currentUser",
-        "languages": ["SimpChinese", "English"]
+        "languages": [
+          "SimpChinese",
+          "English"
+        ]
       }
     }
-  }
+  },
+  "mainBinaryName": "inkpad"
 }
